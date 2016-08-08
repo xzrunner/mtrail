@@ -300,22 +300,22 @@ _draw_shape(struct t2d_emitter* et, const void* ud) {
 
 static void
 _draw_image(struct t2d_emitter* et, const void* ud) {
-	struct mt_color col_mul, col_add;
+	struct mt_color mul_col, add_col;
 	float scale;
 
 	struct t2d_particle* p = et->head;
 	while (p) {
 		float proc = (p->lifetime - p->life) / p->lifetime;
 
-		_color_lerp(&p->sym->col_begin, &p->sym->col_end, &col_mul, proc);
-		_color_lerp(&p->sym->mode.A.col_add_begin, &p->sym->mode.A.col_add_end, &col_add, proc);
+		_color_lerp(&p->sym->col_begin, &p->sym->col_end, &mul_col, proc);
+		_color_lerp(&p->sym->mode.A.add_col_begin, &p->sym->mode.A.add_col_end, &add_col, proc);
 		if (p->life < et->cfg->fadeout_time) {
-			col_mul.a *= p->life / et->cfg->fadeout_time;
+			mul_col.a *= p->life / et->cfg->fadeout_time;
 		}
 
 		_float_lerp(p->sym->mode.A.scale_begin, p->sym->mode.A.scale_end, &scale, proc);
 
-		RENDER_SYMBOL_FUNC(p->sym->mode.A.ud, p->pos.x, p->pos.y, p->angle, scale, col_mul.rgba, col_add.rgba, ud);
+		RENDER_SYMBOL_FUNC(p->sym->mode.A.ud, p->pos.x, p->pos.y, p->angle, scale, mul_col.rgba, add_col.rgba, ud);
 		p = p->next;
 	}
 }

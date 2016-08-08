@@ -21,7 +21,7 @@ struct t2d_symbol {
 	union {
 		// image
 		struct {
-			struct mt_color col_add_begin, col_add_end;
+			struct mt_color add_col_begin, add_col_end;
 			float scale_begin, scale_end;
 			void* ud;
 		} A;
