@@ -82,7 +82,7 @@ struct t2d_emitter {
 
 void t2d_init();
 void t2d_regist_cb(void (*render_symbol_func)(void* symbol, float x, float y, float angle, float scale, uint8_t* mul_col, uint8_t* add_col, const void* ud),
-				   void (*render_shape_func)(const float* positions, const uint32_t* colors, int count));
+				   void (*render_shape_func)(const float* positions, const uint32_t* colors, int count, const void* ud));
 
 struct t2d_emitter* t2d_emitter_create(const struct t2d_emitter_cfg* cfg);
 void t2d_emitter_release(struct t2d_emitter*);

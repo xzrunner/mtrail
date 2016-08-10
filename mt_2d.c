@@ -15,7 +15,7 @@ static struct t2d_particle* PARTICLE_ARRAY = NULL;
 static struct t2d_emitter*	EMITTER_ARRAY = NULL;
 
 void (*RENDER_SYMBOL_FUNC)(void* symbol, float x, float y, float angle, float scale, uint8_t* mul_col, uint8_t* add_col, const void* ud);
-void (*RENDER_SHAPE_FUNC)(const float* positions, const uint32_t* colors, int count);
+void (*RENDER_SHAPE_FUNC)(const float* positions, const uint32_t* colors, int count, const void* ud);
 
 void 
 t2d_init() {
@@ -40,7 +40,7 @@ t2d_init() {
 
 void 
 t2d_regist_cb(void (*render_symbol_func)(void* symbol, float x, float y, float angle, float scale, uint8_t* mul_col, uint8_t* add_col, const void* ud),
-			  void (*render_shape_func)(const float* positions, const uint32_t* colors, int count)) {
+			  void (*render_shape_func)(const float* positions, const uint32_t* colors, int count, const void* ud)) {
 	RENDER_SYMBOL_FUNC = render_symbol_func;
 	RENDER_SHAPE_FUNC = render_shape_func;
 }
@@ -295,7 +295,7 @@ _draw_shape(struct t2d_emitter* et, const void* ud) {
 		_add_shape_node(et, positions, colors, &ptr, &r3, prev);
 	}
 
-	RENDER_SHAPE_FUNC(positions, colors, count);
+	RENDER_SHAPE_FUNC(positions, colors, count, ud);
 }
 
 static void
