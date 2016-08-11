@@ -11,6 +11,12 @@
 #define MAX_PARTICLE_SZ 10000
 #define MAX_EMITTER_SZ	1000
 
+//#define EMITTER_LOG
+
+#ifdef EMITTER_LOG
+static int et_count = 0;
+#endif // EMITTER_LOG
+
 static struct t2d_particle* PARTICLE_ARRAY = NULL;
 static struct t2d_emitter*	EMITTER_ARRAY = NULL;
 
@@ -22,7 +28,7 @@ t2d_init() {
 	int sz = sizeof(struct t2d_particle) * MAX_PARTICLE_SZ;
 	PARTICLE_ARRAY = (struct t2d_particle*)malloc(sz);
 	if (!PARTICLE_ARRAY) {
-		LOGW("malloc err: t2d_init particle");
+		LOGW("%s", "malloc err: t2d_init particle");
 		return;
 	}
 	memset(PARTICLE_ARRAY, 0, sz);
@@ -31,7 +37,7 @@ t2d_init() {
 	sz = sizeof(struct t2d_emitter) * MAX_EMITTER_SZ;
 	EMITTER_ARRAY = (struct t2d_emitter*)malloc(sz);
 	if (!EMITTER_ARRAY) {
-		LOGW("malloc err: t2d_init emitter");
+		LOGW("%s", "malloc err: t2d_init emitter");
 		return;
 	}
 	memset(EMITTER_ARRAY, 0, sz);
@@ -52,6 +58,10 @@ t2d_emitter_create(const struct t2d_emitter_cfg* cfg) {
 	if (!et) {
 		return NULL;
 	}
+#ifdef EMITTER_LOG
+	++et_count;
+	LOGD("++ add %d %p \n", et_count, et);
+#endif // EMITTER_LOG
 	memset(et, 0, sizeof(struct t2d_emitter));
 	et->cfg = cfg;
 	return et;
@@ -59,8 +69,17 @@ t2d_emitter_create(const struct t2d_emitter_cfg* cfg) {
 
 void 
 t2d_emitter_release(struct t2d_emitter* et) {
+#ifdef EMITTER_LOG
+	--et_count;
+	LOGD("-- del %d %p\n", et_count, et);
+#endif // EMITTER_LOG
+
 	t2d_emitter_clear(et);
-	free(et);
+	MT_ARRAY_ALLOC(EMITTER_ARRAY, et);
+
+#ifdef EMITTER_LOG
+	et_count = 0;
+#endif // EMITTER_LOG
 }
 
 void 
