@@ -20,7 +20,7 @@ static int et_count = 0;
 static struct t2d_particle* PARTICLE_ARRAY = NULL;
 static struct t2d_emitter*	EMITTER_ARRAY = NULL;
 
-void (*RENDER_SYMBOL_FUNC)(void* symbol, float x, float y, float angle, float scale, uint8_t* mul_col, uint8_t* add_col, const void* ud);
+void (*RENDER_SYMBOL_FUNC)(void* sym, float x, float y, float angle, float scale, uint8_t* mul_col, uint8_t* add_col, const void* ud);
 void (*RENDER_SHAPE_FUNC)(const float* positions, const uint32_t* colors, int count, const void* ud);
 
 void 
@@ -45,7 +45,7 @@ t2d_init() {
 }
 
 void 
-t2d_regist_cb(void (*render_symbol_func)(void* symbol, float x, float y, float angle, float scale, uint8_t* mul_col, uint8_t* add_col, const void* ud),
+t2d_regist_cb(void (*render_symbol_func)(void* sym, float x, float y, float angle, float scale, uint8_t* mul_col, uint8_t* add_col, const void* ud),
 			  void (*render_shape_func)(const float* positions, const uint32_t* colors, int count, const void* ud)) {
 	RENDER_SYMBOL_FUNC = render_symbol_func;
 	RENDER_SHAPE_FUNC = render_shape_func;
@@ -111,7 +111,7 @@ static inline void
 _init_particle(struct t2d_emitter* et, struct t2d_particle* p) {
 	uint32_t RANDSEED = rand();
 
-	p->sym = (struct t2d_symbol*)(et->cfg->symbols + RANDSEED % et->cfg->symbol_count);
+	p->sym = (struct t2d_symbol*)(et->cfg->syms + RANDSEED % et->cfg->sym_count);
 
 	p->lifetime = et->cfg->life_begin + et->cfg->life_offset * et->particle_count;
 	p->life = p->lifetime;
@@ -126,7 +126,7 @@ _init_particle(struct t2d_emitter* et, struct t2d_particle* p) {
 
 static inline bool
 _add_particle_random(struct t2d_emitter* et, struct sm_vec2* pos) {
-	if (!et->cfg->symbol_count) {
+	if (!et->cfg->sym_count) {
 		return false;
 	}
 

@@ -61,8 +61,8 @@ struct t2d_emitter_cfg {
 
 	int mode_type;
 
-	int symbol_count;
-	struct t2d_symbol* symbols;
+	int sym_count;
+	struct t2d_symbol* syms;
 };
 
 #define SIZEOF_T2D_EMITTER_CFG (sizeof(struct t2d_emitter_cfg) + PTR_SIZE_DIFF)
@@ -81,7 +81,7 @@ struct t2d_emitter {
 };
 
 void t2d_init();
-void t2d_regist_cb(void (*render_symbol_func)(void* symbol, float x, float y, float angle, float scale, uint8_t* mul_col, uint8_t* add_col, const void* ud),
+void t2d_regist_cb(void (*render_symbol_func)(void* sym, float x, float y, float angle, float scale, uint8_t* mul_col, uint8_t* add_col, const void* ud),
 				   void (*render_shape_func)(const float* positions, const uint32_t* colors, int count, const void* ud));
 
 struct t2d_emitter* t2d_emitter_create(const struct t2d_emitter_cfg* cfg);
