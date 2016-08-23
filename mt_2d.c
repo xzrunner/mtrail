@@ -75,11 +75,11 @@ t2d_emitter_release(struct t2d_emitter* et) {
 #endif // EMITTER_LOG
 
 	t2d_emitter_clear(et);
-	MT_ARRAY_ALLOC(EMITTER_ARRAY, et);
+	MT_ARRAY_FREE(EMITTER_ARRAY, et);
 
-#ifdef EMITTER_LOG
-	et_count = 0;
-#endif // EMITTER_LOG
+//#ifdef EMITTER_LOG
+//	et_count = 0;
+//#endif // EMITTER_LOG
 }
 
 void 
