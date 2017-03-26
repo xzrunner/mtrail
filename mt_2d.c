@@ -130,11 +130,8 @@ _add_particle_random(struct t2d_emitter* et, struct sm_vec2* pos) {
 		return false;
 	}
 
-	if (et->head) {
-		if (pos->x == et->head->pos.x ||
-			pos->y == et->head->pos.y) {
-			return false;
-		}
+	if (et->head && pos->x == et->head->pos.x && pos->y == et->head->pos.y) {
+		return false;
 	}
 
 	struct t2d_particle* p;
