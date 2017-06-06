@@ -53,6 +53,11 @@ t2d_regist_cb(void (*render_symbol_func)(void* sym, float x, float y, float angl
 
 struct t2d_emitter* 
 t2d_emitter_create(const struct t2d_emitter_cfg* cfg) {
+	// temporarily disable trail
+	if(1) {
+		return NULL;
+	}
+
 	struct t2d_emitter* et;
 	MT_ARRAY_ALLOC(EMITTER_ARRAY, et);
 	if (!et) {
