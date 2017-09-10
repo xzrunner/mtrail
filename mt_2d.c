@@ -256,6 +256,13 @@ _add_shape_node(struct t2d_emitter* et, float* positions, uint32_t* colors, int*
 	++*ptr;
 }
 
+#ifdef _MSC_VER
+#	include <malloc.h>
+#	define ARRAY(type, name, size) type* name = (type*)_alloca((size) * sizeof(type))
+#else
+#	define ARRAY(type, name, size) type name[size]
+#endif
+
 static void
 _draw_shape(struct t2d_emitter* et, const void* ud) {
 	if (et->particle_count < 2) {
@@ -264,8 +271,8 @@ _draw_shape(struct t2d_emitter* et, const void* ud) {
 
 	int count = et->particle_count * 2;
 
-	float positions[count * 2];
-	uint32_t colors[count];
+	ARRAY(float, positions, count * 2);
+	ARRAY(uint32_t, colors, count);
 
 	struct sm_vec2 l0, l1, r0, r1;
 	struct sm_vec2 l2, l3, r2, r3;
