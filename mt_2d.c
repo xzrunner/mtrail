@@ -232,10 +232,10 @@ _float_lerp(float begin, float end, float* lerp, float proc) {
 
 static inline void
 _color_lerp(struct mt_color* begin, struct mt_color* end, struct mt_color* lerp, float proc) {
-	lerp->r = proc * (end->r - begin->r) + begin->r;
-	lerp->g = proc * (end->g - begin->g) + begin->g;
-	lerp->b = proc * (end->b - begin->b) + begin->b;
-	lerp->a = proc * (end->a - begin->a) + begin->a;
+	lerp->r = (uint8_t)(proc * (end->r - begin->r) + begin->r);
+	lerp->g = (uint8_t)(proc * (end->g - begin->g) + begin->g);
+	lerp->b = (uint8_t)(proc * (end->b - begin->b) + begin->b);
+	lerp->a = (uint8_t)(proc * (end->a - begin->a) + begin->a);
 }
 
 static void
@@ -249,7 +249,7 @@ _add_shape_node(struct t2d_emitter* et, float* positions, uint32_t* colors, int*
 	struct mt_color col;
 	_color_lerp(&p->sym->col_begin, &p->sym->col_end, &col, proc);
 	if (p->life < et->cfg->fadeout_time) {
-		col.a *= p->life / et->cfg->fadeout_time;
+		col.a = (uint8_t)(col.a * p->life / et->cfg->fadeout_time);
 	}
 
 	colors[*ptr] = (col.a << 24) | (col.b << 16) | (col.g << 8) | col.r;
@@ -338,7 +338,7 @@ _draw_image(struct t2d_emitter* et, const void* ud) {
 		_color_lerp(&p->sym->col_begin, &p->sym->col_end, &mul_col, proc);
 		_color_lerp(&p->sym->mode.A.add_col_begin, &p->sym->mode.A.add_col_end, &add_col, proc);
 		if (p->life < et->cfg->fadeout_time) {
-			mul_col.a *= p->life / et->cfg->fadeout_time;
+			mul_col.a = (uint8_t)(mul_col.a * p->life / et->cfg->fadeout_time);
 		}
 
 		_float_lerp(p->sym->mode.A.scale_begin, p->sym->mode.A.scale_end, &scale, proc);
