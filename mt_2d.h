@@ -15,7 +15,7 @@ extern "C"
 #define T2D_MODE_IMAGE	0
 #define T2D_MODE_SHAPE	1
 
-struct t2d_symbol {	
+struct t2d_symbol {
 	struct mt_color col_begin, col_end;
 
 	union {

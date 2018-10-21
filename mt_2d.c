@@ -23,7 +23,7 @@ static struct t2d_emitter*	EMITTER_ARRAY = NULL;
 void (*RENDER_SYMBOL_FUNC)(void* sym, float x, float y, float angle, float scale, uint8_t* mul_col, uint8_t* add_col, const void* ud);
 void (*RENDER_SHAPE_FUNC)(const float* positions, const uint32_t* colors, int count, const void* ud);
 
-void 
+void
 t2d_init() {
 	int sz = sizeof(struct t2d_particle) * MAX_PARTICLE_SZ;
 	PARTICLE_ARRAY = (struct t2d_particle*)malloc(sz);
@@ -44,14 +44,14 @@ t2d_init() {
 	MT_ARRAY_INIT(EMITTER_ARRAY, MAX_EMITTER_SZ);
 }
 
-void 
+void
 t2d_regist_cb(void (*render_symbol_func)(void* sym, float x, float y, float angle, float scale, uint8_t* mul_col, uint8_t* add_col, const void* ud),
 			  void (*render_shape_func)(const float* positions, const uint32_t* colors, int count, const void* ud)) {
 	RENDER_SYMBOL_FUNC = render_symbol_func;
 	RENDER_SHAPE_FUNC = render_shape_func;
 }
 
-struct t2d_emitter* 
+struct t2d_emitter*
 t2d_emitter_create(const struct t2d_emitter_cfg* cfg) {
 	// temporarily disable trail
 	if(1) {
@@ -72,7 +72,7 @@ t2d_emitter_create(const struct t2d_emitter_cfg* cfg) {
 	return et;
 }
 
-void 
+void
 t2d_emitter_release(struct t2d_emitter* et) {
 #ifdef EMITTER_LOG
 	--et_count;
@@ -87,7 +87,7 @@ t2d_emitter_release(struct t2d_emitter* et) {
 //#endif // EMITTER_LOG
 }
 
-void 
+void
 t2d_emitter_clear(struct t2d_emitter* et) {
 	struct t2d_particle* p = et->head;
 	while (p) {
@@ -99,7 +99,7 @@ t2d_emitter_clear(struct t2d_emitter* et) {
 	et->head = NULL;
 }
 
-void 
+void
 t2d_emitter_start(struct t2d_emitter* et) {
 	t2d_emitter_clear(et);
 
@@ -107,7 +107,7 @@ t2d_emitter_start(struct t2d_emitter* et) {
 	et->particle_count = 0;
 }
 
-void 
+void
 t2d_emitter_stop(struct t2d_emitter* et) {
 	et->active = false;
 }
@@ -168,7 +168,7 @@ _remove_particle(struct t2d_emitter* et, struct t2d_particle* p) {
 	}
 }
 
-void 
+void
 t2d_emitter_update(struct t2d_emitter* et, float dt, struct sm_vec2* pos) {
 	struct t2d_particle* prev = NULL;
 	struct t2d_particle* curr = et->head;
@@ -181,7 +181,7 @@ t2d_emitter_update(struct t2d_emitter* et, float dt, struct sm_vec2* pos) {
 			if (prev) {
 				prev->next = NULL;
 			}
-			
+
 			struct t2d_particle* next = curr->next;
 			do {
 				_remove_particle(et, curr);
@@ -192,7 +192,7 @@ t2d_emitter_update(struct t2d_emitter* et, float dt, struct sm_vec2* pos) {
 					break;
 				}
 			} while (true);
-			
+
 			break;
 		}
 	}
@@ -214,13 +214,13 @@ _offset_segment(struct sm_vec2* s, struct sm_vec2* e, float half_width,
 	sm_vec2_vector(&off, s, e);
 	sm_vec2_normalize(&off);
 	off.x *= half_width;
-	off.y *= half_width;	
+	off.y *= half_width;
 
 	struct sm_vec2 tmp;
-	sm_rotate_vector_right_angle(&off, true, &tmp);	
+	sm_rotate_vector_right_angle(&off, true, &tmp);
 	sm_vec2_add(ls, s, &tmp);
 	sm_vec2_add(le, e, &tmp);
-	sm_rotate_vector_right_angle(&off, false, &tmp);	
+	sm_rotate_vector_right_angle(&off, false, &tmp);
 	sm_vec2_add(rs, s, &tmp);
 	sm_vec2_add(re, e, &tmp);
 }
@@ -239,7 +239,7 @@ _color_lerp(struct mt_color* begin, struct mt_color* end, struct mt_color* lerp,
 }
 
 static void
-_add_shape_node(struct t2d_emitter* et, float* positions, uint32_t* colors, int* ptr, 
+_add_shape_node(struct t2d_emitter* et, float* positions, uint32_t* colors, int* ptr,
                 struct sm_vec2* pos, struct t2d_particle* p) {
 	positions[*ptr * 2] = pos->x;
 	positions[*ptr * 2 + 1] = pos->y;
@@ -348,7 +348,7 @@ _draw_image(struct t2d_emitter* et, const void* ud) {
 	}
 }
 
-void 
+void
 t2d_emitter_draw(struct t2d_emitter* et, const void* ud) {
 	if (et->cfg->mode_type == T2D_MODE_SHAPE) {
 		_draw_shape(et, ud);
